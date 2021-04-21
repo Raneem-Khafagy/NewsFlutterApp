@@ -1,36 +1,29 @@
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
+import 'views/screens/home.dart';
+import 'utils/themes/theme_config.dart';
 void main() {
-  runApp(MyApp());
+  runApp(MultiProvider(
+      providers: [
+        ChangeNotifierProvider<ThemeNotifier>(create: (_) => ThemeNotifier()),
+      ],
+      child: MyApp(),
+    ),);
 }
-
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-  @override
+ @override
   Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
+
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'News App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      theme: themeNotifier.themeData,
+      routes: {
+        '/HomeScreen': (context) => HomeScreen(),
+      },
+      home: HomeScreen(),
     );
   }
 }
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    
-    return Scaffold(
-    );
-  }
-}
+ 
