@@ -13,8 +13,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_native_splash: ^1.1.8+4
-  
+  provider: ^5.0.0
+  http: ^0.13.1
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -24,8 +24,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  provider: ^5.0.0
-
+  # newsapi: ^2.0.0
 flutter:
 
   # The following line ensures that the Material Icons font is
