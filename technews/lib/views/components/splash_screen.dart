@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:technews/views/screens/home.dart';
+import '../../views/screens/home.dart';
 import '../../constants/assest_path.dart';
 import 'dart:async';
 
