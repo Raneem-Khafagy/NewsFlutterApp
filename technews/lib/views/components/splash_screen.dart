@@ -9,40 +9,38 @@ class SplashScreen extends StatefulWidget {
   _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State < SplashScreen > {
   @override
   void initState() {
     super.initState();
     startTime();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: initScreen(context),
     );
   }
-  
+
   startTime() async {
     var duration = new Duration(seconds: 3);
     return new Timer(duration, route);
   }
-route() {
+  route() {
     Navigator.pushReplacement(context, MaterialPageRoute(
-        builder: (context) => HomeScreen()
-      )
-    ); 
+      builder: (context) => HomeScreen()
+    ));
   }
-  
+
   initScreen(BuildContext context) {
     return Scaffold(
       body: Center(
         child: Image(image: AssetImage(Assetpath.logo),
-       width: MediaQuery.of(context).size.width * 0.6,
-       ),
-      
-    ),
+          width: MediaQuery.of(context).size.width * 0.6,
+        ),
+
+      ),
     );
   }
 }
-  
