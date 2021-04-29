@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'light_theme.dart';
 import 'dark_theme.dart';
@@ -12,7 +11,7 @@ class ThemeNotifier with ChangeNotifier {
   var iconTheme = Dark.darkIcon;
   final darkTheme = Dark.darkTheme;
   final lightTheme = Light.lightTheme;
-  
+
 
   setTheme(bool changeTheme) {
     if (changeTheme == true) {
