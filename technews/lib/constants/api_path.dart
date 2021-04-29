@@ -1,44 +1,24 @@
-//used singleton pattern to restrict the instantiation of a class to one "single" instance as Api objects needs to coordinate actions across the system. 
-
 // all API endpoints
+import 'package:flutter/material.dart';
+class UrlProvider with ChangeNotifier {
+  String category = '', country = 'us';
+  String apiKey = "9d5fa3e244c34c3d85572538f388113a";
+  geturl() {
+    String url;
+    category == '' ?
+      url = "http://newsapi.org/v2/top-headlines?country=${country}&apiKey=${apiKey}" :
+      url = "http://newsapi.org/v2/top-headlines?country=${country}&category=${category}&apiKey=${apiKey}";
 
-//manage an object '_instance' and return this object instance 
-// class MySingletonClass {
-
-//   static final MySingletonClass _instance = 
-//     MySingletonClass ._internal();
-
-//   // passes the instantiation to the _instance object
-//   factory MySingletonClass() => _instance;
-
-// }
-
-//The _internal method can be used to initialize variables:
-// class MySingletonClass {
-
-//   [...]
-
-//   //initialize variables in here
-//   MySingletonClass._internal() {
-//     //_myVariable has to be defined before
-//     _myVariable = 0;
-//   }
-// }
-
-//To use it in an existing widget, we get the instance object of the class just as we would create a new instance. This is usually done within a 'State<>' object:
-// class _MyHomePageState extends State<MyHomePage> {
-//   MySingletonClass _mySingletonClass = MySingletonClass();
-
-//   [...]
-// }
-
-const apiKey = "827ffc0417e348d09c98e8bcabc54120";
-String category='', country='' ,language ='';
-class ApiPath{
-  static String defult_url = "https://newsapi.org/v2/top-headlines?country=us&apiKey=${apiKey}";
-   get_api_path(String category,String country, String language){
-     
-   String url = "http://newsapi.org/v2/top-headlines?category=${category}&apiKey=${apiKey}";
+    return url;
   }
-}
+  void changeCountry(newCountryName) {
+    country = newCountryName;
+    print("prev" + country);
+    notifyListeners();
+  }
+  void changeCategory(newcategoryName) {
+    category = newcategoryName;
+    notifyListeners();
+  }
 
+}

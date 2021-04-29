@@ -1,41 +1,37 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-class News {
-Future fetchData(String url) async {
+class News extends ChangeNotifier {
   List < Map > data = [];
-  Response response = await get((Uri.parse(url)));
+  Future fetchData(String url) async {
+    Response response = await get((Uri.parse(url)));
 
-  var jsonResponse = jsonDecode(response.body);
-  print(jsonResponse);
-  print("/////////////////////////////////////////////////");
-  if (jsonResponse['status'] == "ok") {
+    var jsonResponse = jsonDecode(response.body);
 
-    var articlesList = jsonResponse['articles'];
-    print(articlesList);
-    print("/////////////////////////////////////////////////");
-    for (var i = 0; i < articlesList.length; i++) {
-      if (articlesList[i]['urlToImage'] != null) {
-         
-        Map article_data = {
-          "title": articlesList[i]['title'],
-          "author": articlesList[i]['author'],
-          "description": articlesList[i]['description'],
-          "articleUrl": articlesList[i]["url"],
-          "urlToImage": articlesList[i]['urlToImage'],
-          "publshedAt": DateTime.parse(articlesList[i]['publishedAt']),
-          "content": articlesList[i]["content"],
-          
-        };
-        data.add(article_data);
+    if (jsonResponse['status'] == "ok") {
+      var articlesList = jsonResponse['articles'];
+      data.clear();
+      for (var i = 0; i < articlesList.length; i++) {
+        if (articlesList[i]['urlToImage'] != null) {
+          Map article_data = {
+            "author": articlesList[i]['author'],
+            "title": articlesList[i]['title'],
+            "description": articlesList[i]['description'],
+            "articleUrl": articlesList[i]["url"],
+            "urlToImage": articlesList[i]['urlToImage'],
+            "publshedAt": DateTime.parse(articlesList[i]['publishedAt']),
+            "content": articlesList[i]["content"],
+          };
+          data.add(article_data);
+        }
       }
-    }
-    print(data);
-    return(data);
-  }else {
+      notifyListeners();
+
+    } else {
       // If that call was not successful, throw an error.
       throw Exception('Failed to load News');
     }
 
-}
+  }
 
 }
