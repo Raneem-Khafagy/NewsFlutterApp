@@ -1,184 +1,85 @@
 import 'package:flutter/material.dart';
-import 'package:technews/constants/assest_path.dart';
-import '../../utils/themes/theme_config.dart';
-import '../../views/components/api_category_filter.dart';
-import '../../views/components/splash_screen.dart';
 import 'package:provider/provider.dart';
-import '../../views/components/theme_icon.dart';
-import 'article.dart';
-class HomeScreen extends StatelessWidget {
-
+import 'package:technews/constants/api_path.dart';
+import '/../views/Widgets/news_card.dart';
+import '/../views/components/drawer.dart';
+class HomeScreen extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-     final themeNotifier = Provider.of<ThemeNotifier>(context, listen: false);  
-    
-          return Scaffold(
-            appBar: AppBar(
-    title: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: <Widget>[
-        Flexible(
-          flex : 1,
-          child: Image.asset(Assetpath.logo,fit: BoxFit.contain,width: 200,)
-        ),
-          Flexible(
-            flex : 1,
-            child: ThemeIcon(themeNotifier: themeNotifier)),
-        
-      ],
-    ),
-    backgroundColor: Colors.transparent,
-    elevation: 0.0,
-  ),
-            body: Center(
-            // child: Column(children: [ApiCategoryFilter(),ThemeIcon(themeNotifier: themeNotifier),],),
-            // child: ThemeIcon(themeNotifier: themeNotifier),
-            // child:news()
-            ),
-          );
-        }
-     
-  }
-
-
-class news extends StatelessWidget {
-  const news({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return     InkWell(
-    
-        onTap: () {
-    
-          Navigator.push(
-    
-              context,
-    
-              MaterialPageRoute(
-    
-                  builder: (context) => ArticlePage(
-    
-                        // article: article,
-    
-                      )));
-    
-        },
-    
-        child: Container(
-    
-          margin: EdgeInsets.all(12.0),
-    
-          padding: EdgeInsets.all(8.0),
-    
-          decoration: BoxDecoration(
-    
-              color: Colors.white,
-    
-              borderRadius: BorderRadius.circular(12.0),
-    
-              boxShadow: [
-    
-                BoxShadow(
-    
-                  color: Colors.black12,
-    
-                  blurRadius: 3.0,
-    
-                ),
-    
-              ]),
-    
-          child: Column(
-    
-            mainAxisAlignment: MainAxisAlignment.start,
-    
-            crossAxisAlignment: CrossAxisAlignment.start,
-    
-            children: [
-    
-              Container(
-    
-                height: 200.0,
-    
-                width: double.infinity,
-    
-                decoration: BoxDecoration(
-    
-                  //let's add the height
-    
-                  image: DecorationImage(
-    
-                      // image: NetworkImage("article.urlToImage"), fit: BoxFit.cover),
-    
-                      image: NetworkImage(Assetpath.logo), fit: BoxFit.cover),
-    
-                  borderRadius: BorderRadius.circular(12.0),
-    
-                ),
-    
-              ),
-    
-              SizedBox(
-    
-                height: 8.0,
-    
-              ),
-    
-              Container(
-    
-                padding: EdgeInsets.all(6.0),
-    
-                decoration: BoxDecoration(
-    
-                  color: Colors.red,
-    
-                  borderRadius: BorderRadius.circular(30.0),
-    
-                ),
-    
-                child: Text(
-    
-                  "article.source.name",
-    
-                  style: TextStyle(
-    
-                    color: Colors.white,
-    
-                  ),
-    
-                ),
-    
-              ),
-    
-              SizedBox(
-    
-                height: 8.0,
-    
-              ),
-    
-              Text(
-    
-                "article.title",
-    
-                style: TextStyle(
-    
-                  fontWeight: FontWeight.bold,
-    
-                  fontSize: 16.0,
-    
-                ),
-    
-              )
-    
-            ],
-    
-          ),
-    
-        ),
-    
-      );
-  }
+  _HomeScreenState createState() => _HomeScreenState();
 }
-
+class _HomeScreenState extends State < HomeScreen >
+  with SingleTickerProviderStateMixin {
+    /////////////////////GET THE PROBER PATH//////
+    // Drawer Animation Controller//////////////////////////
+    late AnimationController _animationController;
+    @override
+    void initState() {
+      super.initState();
+      _animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 300));
+    }
+    _toggleAnimation() {
+      _animationController.isDismissed ?
+        _animationController.forward() :
+        _animationController.reverse();
+    }
+    @override
+    void dispose() {
+      _animationController.dispose();
+      super.dispose();
+    }
+    ////////////////////
+    @override
+    Widget build(BuildContext context) {
+      double height = MediaQuery.of(context).size.height;
+      double width = MediaQuery.of(context).size.width;
+      final rightSlide = width * 0.6;
+      return AnimatedBuilder(
+        animation: _animationController,
+        builder: (context, child) {
+          double slide = rightSlide * _animationController.value;
+          double scale = 1 - (_animationController.value * 0.3);
+          return Stack(
+            children: [
+              Scaffold(
+                backgroundColor: Theme.of(context).primaryColor,
+                body: DrawerComponent(),
+              ),
+              Transform(
+                transform: Matrix4.identity()..translate(slide)..scale(scale),
+                alignment: Alignment.center,
+                child: Scaffold(
+                  backgroundColor: Theme.of(context).backgroundColor,
+                  appBar: PreferredSize(
+                    preferredSize: Size.fromHeight(100),
+                    child: Container(
+                      color: Theme.of(context).backgroundColor,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(12, 24, 0, 0),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              IconButton(
+                                onPressed: () => _toggleAnimation(),
+                                icon: AnimatedIcon(
+                                  icon: AnimatedIcons.menu_close,
+                                  progress: _animationController,
+                                ),
+                              ),
+                            ],
+                          ),
+                      ),
+                    ),
+                  ),
+                  body: NewsCard(
+                    url: Provider.of < UrlProvider > (context).geturl()
+                  ),
+                ),
+              )
+            ],
+          );
+        },
+      );
+    }
+  }
