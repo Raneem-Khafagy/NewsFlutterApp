@@ -1,6 +1,6 @@
 # NewsFlutterApp
 
- Flutter application to track covid-19 cases around the world.
+ 
 
 # Demo
 <p align='center'>
