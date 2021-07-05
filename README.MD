@@ -1,5 +1,9 @@
-# NewsFlutterApp
+# NewsFlutterApp with dark theme
 
+1. Users can navigate between different news categories
+2.Display news according to the chosen category
+3. Display detail screen for news selected
+4. Update news response every 15 minutes in background (Background activity not timer)
  
 
 # Demo
